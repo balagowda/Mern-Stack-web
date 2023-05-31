@@ -17,7 +17,7 @@ const Banner = () => {
         autoPlay={true}
         animation="slide"
         indicators={false}
-        navButtonsAlwaysVisible={true}
+        navButtonsAlwaysVisible={false}
         cycleNavigation={true}
         fullHeightHover={true}
       >
