@@ -1,11 +1,15 @@
-
-import './App.css';
+import "./App.css";
+import NavBar from "./Components/Header/NavBar";
+import Main from "./Components/Home/Main";
+import UnderNav from "./Components/Undernav/UnderNav";
 
 function App() {
   return (
-    <div className="App">
-      <h1>Hello World</h1>
-    </div>
+    <>
+      <NavBar />
+      <UnderNav />
+      <Main />
+    </>
   );
 }
 
