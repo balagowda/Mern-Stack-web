@@ -2,7 +2,8 @@ import "./navbar.css";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Badge } from "@mui/material";
-import Avatar from '@mui/material/Avatar';
+import Avatar from "@mui/material/Avatar";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   return (
@@ -10,7 +11,12 @@ const NavBar = () => {
       <nav>
         <div className="left">
           <div className="navlogo">
-            <img src={"https://www.thesun.co.uk/wp-content/uploads/2022/02/Amazon-Logo-1024x426-1.png?strip=all&w=960"} alt="logo" />
+            <img
+              src={
+                "https://www.thesun.co.uk/wp-content/uploads/2022/02/Amazon-Logo-1024x426-1.png?strip=all&w=960"
+              }
+              alt="logo"
+            />
           </div>
           <div className="nav_searchbar">
             <input type="text" name="" id="" />
@@ -21,7 +27,7 @@ const NavBar = () => {
         </div>
         <div className="right">
           <div className="nav_btn">
-            <a href="">signin</a>
+            <Link to="/login">signin</Link>
           </div>
           <div className="cart_btn">
             <Badge badgeContent={4} color="primary">
