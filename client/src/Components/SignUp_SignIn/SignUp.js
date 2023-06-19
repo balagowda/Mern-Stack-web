@@ -3,7 +3,7 @@ import "./Sign.css";
 import { NavLink } from "react-router-dom";
 
 const SignUp = () => {
-  const [udata, setUdata] = useState({
+  const [data, setData] = useState({
     fname: "",
     email: "",
     mobile: "",
@@ -11,13 +11,11 @@ const SignUp = () => {
     cpassword: "",
   });
 
-  // console.log(udata);
 
-  const adddata = (e) => {
+  const handleInput = (e) => {
     const { name, value } = e.target;
-    // console.log(name,value);
 
-    setUdata((pre) => {
+    setData((pre) => {
       return {
         ...pre,
         [name]: value,
@@ -44,8 +42,8 @@ const SignUp = () => {
               <input
                 type="text"
                 name="fname"
-                onChange={adddata}
-                value={udata.fname}
+                onChange={handleInput}
+                value={data.fname}
                 id="name"
               />
             </div>
@@ -54,8 +52,8 @@ const SignUp = () => {
               <input
                 type="email"
                 name="email"
-                onChange={adddata}
-                value={udata.email}
+                onChange={handleInput}
+                value={data.email}
                 id="email"
               />
             </div>
@@ -64,8 +62,8 @@ const SignUp = () => {
               <input
                 type="number"
                 name="mobile"
-                onChange={adddata}
-                value={udata.mobile}
+                onChange={handleInput}
+                value={data.mobile}
                 id="mobile"
               />
             </div>
@@ -74,8 +72,8 @@ const SignUp = () => {
               <input
                 type="password"
                 name="password"
-                onChange={adddata}
-                value={udata.password}
+                onChange={handleInput}
+                value={data.password}
                 id="password"
                 placeholder="At least 6 characters"
               />
@@ -85,8 +83,8 @@ const SignUp = () => {
               <input
                 type="password"
                 name="cpassword"
-                onChange={adddata}
-                value={udata.cpassword}
+                onChange={handleInput}
+                value={data.cpassword}
                 id="passwordg"
               />
             </div>

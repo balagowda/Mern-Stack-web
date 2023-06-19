@@ -5,16 +5,15 @@ import "./Sign.css";
 const SignIn = () => {
   //   const { account, setAccount } = useContext(Logincontext);
 
-  const [logdata, setData] = useState({
+  const [data, setData] = useState({
     email: "",
     password: "",
   });
 
   // console.log(data);
 
-  const adddata = (e) => {
+  const handleInput = (e) => {
     const { name, value } = e.target;
-    // console.log(name, value);
 
     setData((pre) => {
       return {
@@ -22,6 +21,7 @@ const SignIn = () => {
         [name]: value,
       };
     });
+
   };
 
   return (
@@ -44,8 +44,8 @@ const SignIn = () => {
               <input
                 type="email"
                 name="email"
-                onChange={adddata}
-                value={logdata.email}
+                onChange={handleInput}
+                value={data.email}
                 id="email"
               />
             </div>
@@ -54,8 +54,8 @@ const SignIn = () => {
               <input
                 type="password"
                 name="password"
-                onChange={adddata}
-                value={logdata.password}
+                onChange={handleInput}
+                value={data.password}
                 id="password"
                 placeholder="At least 6 characters"
               />

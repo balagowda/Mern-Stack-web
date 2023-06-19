@@ -30,9 +30,11 @@ const NavBar = () => {
             <Link to="/login">signin</Link>
           </div>
           <div className="cart_btn">
-            <Badge badgeContent={4} color="primary">
-              <ShoppingCartIcon id="icon" />
-            </Badge>
+            <Link to="/cart">
+              <Badge badgeContent={4} color="primary">
+                <ShoppingCartIcon id="icon" />
+              </Badge>
+            </Link>
             <p>Cart</p>
           </div>
           <Avatar className="avtar" />
