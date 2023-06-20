@@ -1,4 +1,4 @@
-export const products = [
+const products = [
     { 
         id: 'product1',
         url: 'https://rukminim1.flixcart.com/image/150/150/kapoo7k0/electric-kettle/p/6/s/pigeon-favourite-original-imafs7xhj5uwgrh4.jpeg?q=70', 
@@ -80,8 +80,10 @@ export const products = [
             cost: 1124,
             discount: '40%'
         },
-        description: 'This is banded hair dryer you can dry your hairs smoothly without any disturbance',
+        description: '',
         discount: 'From ₹499', 
         tagline: 'Kubra, Nova & more' 
     }
 ]
+
+module.exports = products;

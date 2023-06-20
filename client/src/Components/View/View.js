@@ -1,12 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Divider } from "@mui/material";
 import { useParams } from "react-router";
 import CircularProgress from "@mui/material/CircularProgress";
 import './view.css';
 
 const View = () => {
-  const [inddata, setIndedata] = useState("");
-  const { id } = useParams("");
+  const [proData, setProData] = useState("");
+  const { id } = useParams();
+
+  const getProductData = async()=>{
+    const res = await fetch(`/getproducts/${id}`,{
+      method:"GET",
+      headers:{
+        "Content-Type":"application/json"
+      }
+    });
+
+    if(res.status!==201){
+      console.log("No data available");
+    }
+
+    const data = await res.json();
+    setProData(data);
+  }
+
+  useEffect(()=>{
+    getProductData();
+  },[id]);
 
   const addtocart = async (id) => {
     console.log(id);
@@ -14,10 +34,10 @@ const View = () => {
 
   return (
     <div className="view_section">
-      {/* {inddata && Object.keys(inddata).length && ( */}
+      {proData && Object.keys(proData).length && (
         <div className="view_container">
           <div className="left_view">
-            <img src='https://rukminim1.flixcart.com/image/416/416/kl6wx3k0/sandwich-maker/8/r/d/sandwich-01-flipkart-smartbuy-original-imagydds4zthxt8z.jpeg?q=70' alt="view" />
+            <img src={proData.url} alt="view" />
             <div className="view_btn">
               <button
                 className="view_btn1"
@@ -29,29 +49,29 @@ const View = () => {
             </div>
           </div>
           <div className="right_view">
-            <h3>blabla</h3>
-            <h4>blabla</h4>
+            <h3>{proData.title.shortTitle}</h3>
+            <h4>{proData.title.longTitle}</h4>
             <Divider />
             <p className="mrp">
-              M.R.P. : <del>₹200</del>
+              M.R.P. : <del>₹{proData.price.mrp}</del>
             </p>
             <p>
               Deal of the Day :{" "}
-              <span style={{ color: "#B12704" }}>₹200.00</span>
+              <span style={{ color: "#B12704" }}>₹{proData.price.cost}.00</span>
             </p>
             <p>
               You save :{" "}
               <span style={{ color: "#B12704" }}>
                 {" "}
-                ₹50 (
-                60){" "}
+                ₹{proData.price.mrp - proData.price.cost} (
+                {proData.price.discount}){" "}
               </span>
             </p>
 
             <div className="discount_box">
               <h5>
                 Discount :{" "}
-                <span style={{ color: "#111" }}>50</span>{" "}
+                <span style={{ color: "#111" }}>{proData.discount}</span>{" "}
               </h5>
               <h4>
                 FREE Delivery :{" "}
@@ -78,21 +98,21 @@ const View = () => {
                   letterSpacing: "0.4px",
                 }}
               >
-                15
+                {proData.description}
               </span>
             </p>
           </div>
         </div>
-      {/* )} */}
+      )}
 
-      {/* {!inddata ? (
+      {!proData ? (
         <div className="circle">
           <CircularProgress />
           <h2> Loading....</h2>
         </div>
       ) : (
         ""
-      )} */}
+      )}
     </div>
   );
 };
