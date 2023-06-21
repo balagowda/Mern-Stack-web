@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./Sign.css";
 import { NavLink } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
   const [data, setData] = useState({
@@ -11,7 +13,6 @@ const SignUp = () => {
     cpassword: "",
   });
 
-
   const handleInput = (e) => {
     const { name, value } = e.target;
 
@@ -21,6 +22,47 @@ const SignUp = () => {
         [name]: value,
       };
     });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { fname, email, mobile, password, cpassword } = data;
+
+    const res = await fetch("/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fname,
+        email,
+        mobile,
+        password,
+        cpassword,
+      }),
+    });
+
+    const reply = await res.json();
+    // console.log(reply);
+
+    if (res.status === 422 || !data) {
+      toast.warn(reply.error, {
+        position: "top-center",
+        });
+    
+    } else {
+      toast.success('Registered Sucessfully', {
+        position: "top-center",
+        });
+      setData({
+        ...data,
+        fname: "",
+        email: "",
+        mobile: "",
+        password: "",
+        cpassword: "",
+      });
+    }
   };
 
   return (
@@ -88,7 +130,7 @@ const SignUp = () => {
                 id="passwordg"
               />
             </div>
-            <button type="submit" className="signin_btn">
+            <button type="submit" className="signin_btn" onClick={handleSubmit}>
               Continue
             </button>
 
@@ -98,6 +140,7 @@ const SignUp = () => {
             </div>
           </form>
         </div>
+        <ToastContainer />
       </div>
     </section>
   );

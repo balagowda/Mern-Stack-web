@@ -37,7 +37,7 @@ const View = () => {
       {proData && Object.keys(proData).length && (
         <div className="view_container">
           <div className="left_view">
-            <img src={proData.url} alt="view" />
+            <img src={proData.detailUrl} alt="view" />
             <div className="view_btn">
               <button
                 className="view_btn1"
