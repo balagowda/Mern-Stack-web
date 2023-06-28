@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./Sign.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = () => {
   //   const { account, setAccount } = useContext(Logincontext);
@@ -21,8 +23,42 @@ const SignIn = () => {
         [name]: value,
       };
     });
-
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password} = data;
+
+    const res = await fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    const reply = await res.json();
+
+    if(res.status === 422 || !data){
+      toast.warn(reply.error, {
+        position: "top-center",
+      });
+    }
+    else {
+      toast.success('Login Sucess', {
+        position: "top-center",
+        });
+      setData({
+        ...data,
+        email: "",
+        password: "",
+      });
+    }
+
+  }
 
   return (
     <section>
@@ -60,7 +96,7 @@ const SignIn = () => {
                 placeholder="At least 6 characters"
               />
             </div>
-            <button type="submit" className="signin_btn">
+            <button type="submit" className="signin_btn" onClick={handleSubmit}>
               Sign In
             </button>
           </form>
@@ -72,6 +108,7 @@ const SignIn = () => {
             <NavLink to="/register">Create your Amazon Account</NavLink>
           </button>
         </div>
+        <ToastContainer />
       </div>
     </section>
   );

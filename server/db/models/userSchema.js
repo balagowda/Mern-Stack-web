@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const jwt = require('jsonwebtoken');
+const secretKey = process.env.KEY;
 
 const userSchema = new mongoose.Schema({
   fname: {
@@ -27,12 +29,12 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    maxlength: 6,
+    minlength: 6,
   },
   cpassword: {
     type: String,
     required: true,
-    maxlength: 6,
+    minlength: 6,
   },
   tokens: [
     {
@@ -54,6 +56,35 @@ userSchema.pre("save", async function(next){
   next();
 
 });
+
+// token generate process
+
+userSchema.methods.generateAuthToken = async function(){
+  try {
+    
+    let token = jwt.sign({_id:this._id},secretKey);
+    this.tokens = this.tokens.concat({token});
+    await this.save();
+    return token;
+
+  } catch (error) {
+    console.log("Error while generating token",error);
+  }
+}
+
+//Add to Cart process
+
+userSchema.methods.addCartData = async function(cart){
+  try {
+
+    this.carts = this.carts.concat({cart});
+    await this.save();
+    return this.carts;
+
+  } catch (error) {
+    console.log("Error while adding item to cart",error);
+  }
+}
 
 const User = new mongoose.model("User", userSchema);
 

@@ -28,8 +28,29 @@ const View = () => {
     getProductData();
   },[id]);
 
-  const addtocart = async (id) => {
-    console.log(id);
+  const addToCart = async (id) => {
+
+    const checkRes = await fetch(`/addcart/:${id}`,{
+      method:'POST',
+      headers:{
+        Accept:'application/json',
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        proData
+      }),
+      credentials:'include'
+    });
+
+    const reply = await checkRes.json();
+    console.log(reply);
+
+    if(checkRes.status ===401 || !reply){
+      console.log("Invalid User");
+    }
+    else{
+      alert("item Added to cart");
+    }
   };
 
   return (
@@ -41,7 +62,7 @@ const View = () => {
             <div className="view_btn">
               <button
                 className="view_btn1"
-                onClick={() => addtocart(5252)}
+                onClick={() => addToCart(5252)}
               >
                 Add to cart
               </button>
