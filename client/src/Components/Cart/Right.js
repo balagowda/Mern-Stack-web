@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import './cart.css';
 
-const Right = () => {
+const Right = ({item}) => {
 
-    const [val, setVal] = useState(false);
+  const [val, setVal] = useState(false);
+  const [cost,setCost] = useState(0);
+
+  function calculateCost() {
+    let price = 0;
+    item.map((item) => {
+      price += item.cart.price.cost
+    });
+    setCost(price);
+  }
+
+  useEffect(()=>{
+    calculateCost();
+  },[item.length]);
 
   return (
     <div className="right_buy">
@@ -22,8 +35,8 @@ const Right = () => {
           </span>
         </p>
         <h3>
-          Subtotal (2 items):{" "}
-          <span style={{ fontWeight: "700" }}> ₹10.00</span>
+          Subtotal ({item.length} items):{" "}
+          <span style={{ fontWeight: "700" }}> ₹{cost}.00</span>
         </h3>
         <button className="rightbuy_btn" >
           Proceed to Buy

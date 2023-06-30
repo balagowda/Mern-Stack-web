@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Divider } from "@mui/material";
-import { useParams } from "react-router";
+import { useParams,useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import './view.css';
+import { LoginContext } from "../Context/Context";
 
 const View = () => {
   const [proData, setProData] = useState("");
   const { id } = useParams();
+
+  const {account,setAccount} = useContext(LoginContext);
+
+  const reDirect = useNavigate("");
 
   const getProductData = async()=>{
     const res = await fetch(`/getproducts/${id}`,{
@@ -30,7 +35,7 @@ const View = () => {
 
   const addToCart = async (id) => {
 
-    const checkRes = await fetch(`/addcart/:${id}`,{
+    const checkRes = await fetch(`/addcart/${id}`,{
       method:'POST',
       headers:{
         Accept:'application/json',
@@ -43,13 +48,15 @@ const View = () => {
     });
 
     const reply = await checkRes.json();
-    console.log(reply);
+    // console.log(reply);
 
     if(checkRes.status ===401 || !reply){
       console.log("Invalid User");
     }
     else{
-      alert("item Added to cart");
+      // alert("item Added to cart");
+      reDirect('/cart');
+      setAccount(reply);
     }
   };
 
@@ -62,7 +69,7 @@ const View = () => {
             <div className="view_btn">
               <button
                 className="view_btn1"
-                onClick={() => addToCart(5252)}
+                onClick={() => addToCart(id)}
               >
                 Add to cart
               </button>

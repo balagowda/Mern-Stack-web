@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./Sign.css";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { LoginContext } from "../Context/Context";
 
 const SignIn = () => {
-  //   const { account, setAccount } = useContext(Logincontext);
+  const { account, setAccount } = useContext(LoginContext);
+  const redirect = useNavigate("");
 
   const [data, setData] = useState({
     email: "",
@@ -27,7 +29,7 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { email, password} = data;
+    const { email, password } = data;
 
     const res = await fetch("/login", {
       method: "POST",
@@ -42,23 +44,23 @@ const SignIn = () => {
 
     const reply = await res.json();
 
-    if(res.status === 422 || !data){
+    if (res.status === 422 || !data) {
       toast.warn(reply.error, {
         position: "top-center",
       });
-    }
-    else {
-      toast.success('Login Sucess', {
+    } else {
+      redirect("/");
+      setAccount(reply);
+      toast.success("Login Sucess", {
         position: "top-center",
-        });
+      });
       setData({
         ...data,
         email: "",
         password: "",
       });
     }
-
-  }
+  };
 
   return (
     <section>

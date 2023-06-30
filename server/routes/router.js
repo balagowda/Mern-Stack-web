@@ -5,6 +5,7 @@ const User = require("../db/models/userSchema");
 const bcrypt = require("bcryptjs");
 const Authenticate = require('../Auth/Authenticate');
 
+//home page products
 router.get("/getproducts", async (req, res) => {
   try {
     const productData = await Products.find();
@@ -85,10 +86,10 @@ router.post("/login", async (req, res) => {
         //token generate function
         const token = await userLogin.generateAuthToken();
 
-        res.cookie("Amezon", token, {
-          expires: new Date(Date.now() + 2700000),
+        res.cookie("cloneProject", token, {
+          expires: new Date(Date.now() + 2589000),
           httpOnly: true
-        });
+      });
 
         res.status(201).json({message:"login Success"});
       }
@@ -114,7 +115,7 @@ router.post('/addcart/:id',Authenticate,async(req,res)=>{
     const userContact = await User.findOne({_id:req.userID});
 
     if(userContact){
-      const cartData = await userContact.addcartData(cart);
+      const cartData = await userContact.addCartData(cart);
       await userContact.save();
       res.status(201).json(userContact);
     }
@@ -125,6 +126,56 @@ router.post('/addcart/:id',Authenticate,async(req,res)=>{
   } catch (error) {
     console.log(error.message);
   }
+});
+
+//finding user and cart item function
+
+router.get('/userdata',Authenticate,async(req,res)=>{
+  try {
+
+    const buyUser = await User.findOne({_id:req.userID});
+    // console.log(buyUser);
+    res.status(201).json(buyUser);
+    
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+// deleting cart element
+
+router.get('/delete/:id',Authenticate,(req,res)=>{
+  try {
+    const {id} = req.params;
+    console.log(id);
+    req.rootUser.carts = req.rootUser.carts.filter((cruval)=>{
+      return cruval.cart.id !== id;
+    });
+    req.rootUser.save();
+    // console.log(req.rootUser);
+    res.status(201).json(req.rootUser);
+  } catch (error) {
+    console.log("Error inremoving the cart item");
+    req.status(400).json({error:"Error in removing the cart item"});
+  }
+});
+
+//Logout user
+
+router.get('/logout',Authenticate,(req,res)=>{
+  try {
+    req.rootUser.tokens = req.rootUser.tokens.filter((cruval) => {
+        return cruval.token !== req.token
+    });
+
+    res.clearCookie("cloneProject", { path: "/" });
+    req.rootUser.save();
+    res.status(201).json(req.rootUser.tokens);
+    console.log("user logout");
+
+} catch (error) {
+    console.log(error + "error in user logout");
+}
 });
 
 module.exports = router;

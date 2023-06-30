@@ -1,9 +1,38 @@
-import React from "react";
+import React, { useContext } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import TurnedInIcon from '@mui/icons-material/TurnedIn';
-import SearchIcon from '@mui/icons-material/Search';
+import TurnedInIcon from "@mui/icons-material/TurnedIn";
+import SearchIcon from "@mui/icons-material/Search";
+import { LoginContext } from "../Context/Context";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Option = () => {
+const Option = ({ deleteData, get }) => {
+  const { account, setAccount } = useContext(LoginContext);
+
+  const deleteItem = async (id) => {
+    const res = await fetch(`/delete/${id}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    const reply = await res.json();
+
+    if (res.status === 400 || !reply) {
+      console.log("error in removing item from cart");
+    } 
+    else {
+      setAccount(reply);
+      get();
+      toast.success("Item removed from cart", {
+        position: "top-center",
+      });
+    }
+  };
+
   return (
     <div className="add_remove_select">
       <select>
@@ -14,18 +43,21 @@ const Option = () => {
         <option value="5">5</option>
         <option value="6">6</option>
       </select>
-      <p style={{ cursor: "pointer" }}>
+      <p style={{ cursor: "pointer" }} onClick={() => deleteItem(deleteData)}>
         <DeleteIcon />
         Delete
-      </p><span>|</span>
+      </p>
+      <span>|</span>
       <p style={{ cursor: "pointer" }} className="forremovemedia">
-        <TurnedInIcon/>
+        <TurnedInIcon />
         Save or Later
-      </p><span>|</span>
+      </p>
+      <span>|</span>
       <p style={{ cursor: "pointer" }} className="forremovemedia">
-        <SearchIcon/>
+        <SearchIcon />
         See More Like This
       </p>
+      <ToastContainer />
     </div>
   );
 };
