@@ -14,6 +14,9 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { makeStyles } from "@material-ui/core";
+import { useSelector } from "react-redux";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
 
 const usestyle = makeStyles({
   component: {
@@ -29,11 +32,24 @@ const NavBar = () => {
   const { account, setAccount } = useContext(LoginContext);
   // console.log(account);
 
+  //All useState components
   const [sideOpen, setSideOpen] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(false);
 
+  const [text, setText] = useState("");
+
+  const [listOpen, setListOpen] = useState(true);
+
   const reDirect = useNavigate("");
+
+  //redux state data fetching
+  const { products } = useSelector((state) => state.getproductsdata);
+
+  const getText = (item) => {
+    setText(item);
+    setListOpen(false);
+  };
 
   //styling component
   const classes = usestyle();
@@ -130,12 +146,41 @@ const NavBar = () => {
             </Link>
           </div>
           <div className="nav_searchbar">
-            <input type="text" name="" id="" />
+            <input
+              type="text"
+              name=""
+              id=""
+              placeholder="Search products"
+              onChange={(e) => getText(e.target.value)}
+            />
             <div className="search_icon">
               <SearchIcon id="search" />
             </div>
+
+            {/* Search product filter */}
+            {text && (
+              <List className="extrasearch" hidden={listOpen}>
+                {products
+                  .filter((product) =>
+                    product.title.longTitle
+                      .toLowerCase()
+                      .includes(text.toLowerCase())
+                  )
+                  .map((product) => (
+                    <ListItem>
+                      <NavLink
+                        to={`/viewItem/${product.id}`}
+                        onClick={() => setListOpen(true)}
+                      >
+                        {product.title.longTitle}
+                      </NavLink>
+                    </ListItem>
+                  ))}
+              </List>
+            )}
           </div>
         </div>
+
         <div className="right">
           {account ? (
             ""
@@ -196,7 +241,9 @@ const NavBar = () => {
                 "aria-labelledby": "basic-button",
               }}
             >
-              <MenuItem onClick={handleShut} style={{ margin: 10 }}>My account</MenuItem>
+              <MenuItem onClick={handleShut} style={{ margin: 10 }}>
+                My account
+              </MenuItem>
               {account ? (
                 <MenuItem style={{ margin: 10 }} onClick={logoutUser}>
                   <LogoutIcon style={{ fontSize: 16, marginRight: 3 }} /> Logout

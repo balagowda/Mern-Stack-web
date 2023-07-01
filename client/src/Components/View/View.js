@@ -104,7 +104,7 @@ const View = () => {
               <h4>
                 FREE Delivery :{" "}
                 <span style={{ color: "#111", fontWeight: "600" }}>
-                  Oct 8 - 21
+                  Aug 8 - 23
                 </span>{" "}
                 Details
               </h4>

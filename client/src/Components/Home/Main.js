@@ -4,18 +4,16 @@ import "./main.css";
 import Slide from "./Slide";
 import { Divider } from "@mui/material";
 import { getProductsAction } from "../redux/actions/Action";
-import {useDispatch,useSelector} from 'react-redux';
-
+import { useDispatch, useSelector } from "react-redux";
 
 const Main = () => {
-
-  const {products} = useSelector(state=>state.getproductsdata);
+  const { products } = useSelector((state) => state.getproductsdata);
   // console.log(products);
   const dispatch = useDispatch();
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getProductsAction());
-  },[dispatch]);
+  }, [dispatch]);
 
   return (
     <>
@@ -26,7 +24,7 @@ const Main = () => {
 
         <div className="slide_part">
           <div className="left_slide">
-            <Slide title="Deal Of The Day" products={products}/>
+            <Slide title="Deal Of The Day" products={products} />
           </div>
           <div className="right_slide">
             <h4>Festival latest launches</h4>
@@ -38,7 +36,7 @@ const Main = () => {
           </div>
         </div>
 
-        <Slide title="Today's Deal" products={products}/>
+        <Slide title="Today's Deal" products={products} />
 
         <div className="center_img">
           <img
@@ -47,8 +45,8 @@ const Main = () => {
           />
         </div>
 
-        <Slide title="Best Seller" products={products}/>
-        <Slide title="Upto 80% off" products={products}/>
+        <Slide title="Best Seller" products={products} />
+        <Slide title="Upto 80% off" products={products} />
       </div>
 
       <Divider />
