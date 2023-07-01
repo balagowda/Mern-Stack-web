@@ -4,7 +4,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Badge, Drawer, IconButton } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import { useContext, useEffect, useState } from "react";
-import { Link, NavLink, redirect, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { LoginContext } from "../Context/Context";
 import Sidebar from "./Sidebar";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -91,11 +91,14 @@ const NavBar = () => {
       const error = new Error(reply1.error);
       throw error;
     } else {
+      setAccount((prevAccount) => ({
+        ...prevAccount,
+        account: false,
+      }));
       reDirect("/");
       toast.success("Logout Successfull", {
         position: "top-center",
       });
-      setAccount(false);
     }
   };
 

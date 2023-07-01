@@ -1,61 +1,65 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Divider } from "@mui/material";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
-import './view.css';
+import "./view.css";
 import { LoginContext } from "../Context/Context";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const View = () => {
   const [proData, setProData] = useState("");
   const { id } = useParams();
 
-  const {account,setAccount} = useContext(LoginContext);
+  const { account, setAccount } = useContext(LoginContext);
 
   const reDirect = useNavigate("");
 
-  const getProductData = async()=>{
-    const res = await fetch(`/getproducts/${id}`,{
-      method:"GET",
-      headers:{
-        "Content-Type":"application/json"
-      }
+  //Fetching product data
+  const getProductData = async () => {
+    const res = await fetch(`/getproducts/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
 
-    if(res.status!==201){
+    if (res.status !== 201) {
       console.log("No data available");
     }
 
     const data = await res.json();
     setProData(data);
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     getProductData();
-  },[id]);
+  }, [id]);
 
+  //Adding item to cart
   const addToCart = async (id) => {
-
-    const checkRes = await fetch(`/addcart/${id}`,{
-      method:'POST',
-      headers:{
-        Accept:'application/json',
-        'Content-Type':'application/json'
+    const checkRes = await fetch(`/addcart/${id}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
-      body:JSON.stringify({
-        proData
+      body: JSON.stringify({
+        proData,
       }),
-      credentials:'include'
+      credentials: "include",
     });
 
     const reply = await checkRes.json();
     // console.log(reply);
 
-    if(checkRes.status ===401 || !reply){
+    if (checkRes.status === 401 || !reply) {
       console.log("Invalid User");
-    }
-    else{
-      // alert("item Added to cart");
-      reDirect('/cart');
+    } else {
+      toast.success("Item added to cart", {
+        position: "top-center",
+      });
+      reDirect("/cart");
       setAccount(reply);
     }
   };
@@ -67,10 +71,7 @@ const View = () => {
           <div className="left_view">
             <img src={proData.detailUrl} alt="view" />
             <div className="view_btn">
-              <button
-                className="view_btn1"
-                onClick={() => addToCart(id)}
-              >
+              <button className="view_btn1" onClick={() => addToCart(id)}>
                 Add to cart
               </button>
               <button className="view_btn2">Buy Now</button>
@@ -130,6 +131,7 @@ const View = () => {
               </span>
             </p>
           </div>
+          <ToastContainer />
         </div>
       )}
 

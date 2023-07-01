@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Divider } from "@mui/material";
+import { CircularProgress, Divider } from "@mui/material";
 import "./cart.css";
 import Option from "./Option";
 import Subtotal from "./Subtotal";
 import Right from "./Right";
-
 
 const Cart = () => {
   const [cartdata, setCartdata] = useState("");
@@ -12,27 +11,26 @@ const Cart = () => {
 
   const getdatabuy = async () => {
     const res = await fetch("/userdata", {
-      method:'GET',
-      headers:{
-        Accept:"application/json",
-        'Content-Type':"application/json",
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
-      credentials:'include',
+      credentials: "include",
     });
 
     const reply = await res.json();
-    
-    if(res.status!==201){
-      console.log("error",res);
-    }
-    else{
+
+    if (res.status !== 201) {
+      console.log("error", res);
+    } else {
       setCartdata(reply.carts);
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     getdatabuy();
-  },[]);
+  }, []);
 
   return (
     <>
@@ -53,7 +51,9 @@ const Cart = () => {
                       <div className="item_details">
                         <h4>{e.cart.title.longTitle}</h4>
                         <h4>{e.cart.title.shortTitle}</h4>
-                        <h4 className="diffrentprice">₹{e.cart.price.cost}.00</h4>
+                        <h4 className="diffrentprice">
+                          ₹{e.cart.price.cost}.00
+                        </h4>
                         <p className="unusuall">
                           Usually dispatched in 8 days.
                         </p>
@@ -62,7 +62,7 @@ const Cart = () => {
                           src="https://m.media-amazon.com/images/G/31/marketing/fba/fba-badge_18px-2x._CB485942108_.png"
                           alt="logo"
                         />
-                        <Option deleteData={e.cart.id} get={getdatabuy}/>
+                        <Option deleteData={e.cart.id} get={getdatabuy} />
                       </div>
                       <h3 className="item_price">₹{e.cart.price.cost}.00</h3>
                     </div>
@@ -71,14 +71,18 @@ const Cart = () => {
                 );
               })}
 
-              <Subtotal item={cartdata}/>
+              <Subtotal item={cartdata} />
             </div>
-            <Right item={cartdata}/>
+            <Right item={cartdata} />
           </div>
         </div>
       ) : (
-        // <Empty />
-        " "
+        <div className="fullBody">
+          <div className="circle">
+            <CircularProgress />
+            <h2> Loading....</h2>
+          </div>
+        </div>
       )}
     </>
   );
